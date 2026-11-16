@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: waterbonia-web
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /up
+    envVars:
+      - key: APP_NAME
+        value: "Waterbonia"
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        value: base64:uxI34h1FNEg6ubExPMl0PjG657MlcoImzgWdQNp1QEw=
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DATABASE_URL
+        fromDatabase:
+          name: waterbonia-db
+          property: connectionString
+      - key: DB_URL
+        fromDatabase:
+          name: waterbonia-db
+          property: connectionString
+
+databases:
+  - name: waterbonia-db
+    databaseName: waterbonia
+    user: waterbonia
+    plan: free
+    region: singapore
+    postgresMajorVersion: "16"
